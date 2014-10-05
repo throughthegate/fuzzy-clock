@@ -1,8 +1,42 @@
-var fz = function() {
+var hand_circle = function(cx, cy, polar_r, fuzziness, r, color) {
+    var draw = function() {
+
+    };
+    return {
+        draw: draw,
+    };
+};
+
+var clock_hand = function(cx, cy, r, fuzziness, n_circles, color) {
+
+    var movement = 0.4;
+    var smallC = 7; // smallest circle radius
+    var largeC = 13; // biggest circle radius
+    var circles = [];
+
+    for (var i = 0; i < n_circles; i++) {
+        circles.push(hand_circle(cx, cy,
+            (Math.random() * 0.9 + 0.1) * r,
+            (Math.random() * 2 - 1) * fuzziness,
+            (Math.random() * (largeC - smallC)) + smallC,
+            color));
+    }
+
+    var draw = function() {
+
+    };
+
+    return {
+        draw: draw,
+    };
+};
+
+var fuzzy_clock = function() {
 
     var canvas = document.getElementById('clock');
     var ctx = canvas.getContext('2d');
     var w = h = cx = cy = r = clock_r = hrs_r = min_r = 0;
+    var hrs_hand = null, min_hand = null;
 
     var init = function() {
         w = $(window).width() * 0.9;
@@ -24,6 +58,9 @@ var fz = function() {
             var y = cy + Math.sin(a) * clock_r;
             draw_circle(x, y, 4, '#FFFFFF');
         }
+
+        hrs_hand = clock_hand(cx, cy, hrs_r, Math.PI * .1, 30, '#FF00FF');
+        min_hand = clock_hand(cx, cy, min_r, Math.PI * .3, 70, '#FFFF00');
     };
 
     var draw = function() {
@@ -44,7 +81,7 @@ var fz = function() {
 };
 
 window.onload = function() {
-    var my_fuzzy_clock = fz();
+    var my_fuzzy_clock = fuzzy_clock();
     my_fuzzy_clock.init();
 };
 
